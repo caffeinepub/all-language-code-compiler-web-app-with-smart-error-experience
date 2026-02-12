@@ -1,0 +1,22 @@
+{
+  "backend/main.mo": "Motoko canister defining supported languages, API config, authorization guard, and an HTTP outcall-based transform/echo request.",
+  "feature_evidence.json": "Feature evidence report listing implemented features, associated files, components, and test IDs.",
+  "frontend-file-summaries.txt": "JSON mapping of frontend file paths to short, human-written summaries of each file’s purpose.",
+  "frontend/index.css": "Tailwind base layers and OKLCH color variables defining the app’s light/dark theme and component tokens.",
+  "frontend/index.html": "HTML skeleton that mounts the React app and loads main.tsx.",
+  "frontend/src/App.tsx": "Root React component rendering the CompilerPage and notification Toaster.",
+  "frontend/src/components/compiler/CodeFrame.tsx": "Displays contextual code around a diagnostic location with highlighted line and caret column indicator.",
+  "frontend/src/components/compiler/DiagnosticsPanel.tsx": "Renders a selectable list of diagnostics and shows an inline CodeFrame for the selected item.",
+  "frontend/src/components/compiler/ResultsPanel.tsx": "Shows compile/run results with tabs for stdout, diagnostics, and raw stderr along with status and timing badges.",
+  "frontend/src/hooks/useActor.ts": "React Query hook that creates and caches an authenticated/anonymous backend actor and refreshes dependent queries on identity change.",
+  "frontend/src/hooks/useCompileRunMutation.ts": "Defines a React Query mutation that sends compile requests to the mock compile/run client.",
+  "frontend/src/hooks/useInternetIdentity.ts": "Implements an Internet Identity context and provider with login, logout, and stored identity restoration.",
+  "frontend/src/index.css": "Sets up Tailwind base layers and defines light/dark theme CSS variables for UI styling.",
+  "frontend/src/lib/backend/compileClient.ts": "Provides a mock compile-and-run backend that simulates delays and returns predefined or generated results.",
+  "frontend/src/lib/diagnostics/parseDiagnostics.ts": "Parses stderr text into structured diagnostics using pattern matching heuristics.",
+  "frontend/src/main.tsx": "Bootstrap code that initializes React, React Query, and the Internet Identity provider before rendering the app.",
+  "frontend/src/pages/CompilerPage.tsx": "UI page for writing, compiling, and running code with language selection and results/diagnostics display.",
+  "frontend/src/types/compiler.ts": "Declares TypeScript interfaces for compile requests, results, and diagnostics.",
+  "frontend/tailwind.config.js": "Configures Tailwind theme extensions, colors, components, plugins, and container settings.",
+  "project_state.json": "Defines project state, goals, features, and new requests for a multi-language code compiler web app with smart error handling and UI/branding assets."
+}

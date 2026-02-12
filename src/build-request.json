@@ -1,0 +1,157 @@
+{
+  "kind": "build_request",
+  "title": "All-language code compiler web app with smart error experience",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Create a frontend page that lets a user write code, choose a programming language, and submit a compile/run request, then displays stdout, stderr, exit status, and timing information in a clear results layout.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Make a all language code compiler smart error experience"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User can select a language from a dropdown and type/paste code into an editor area",
+        "User can click a primary action (e.g., “Compile & Run”) to submit the code",
+        "UI shows separate sections/tabs for Standard Output and Standard Error",
+        "UI shows a visible status for: idle, submitting, success, failure (request-level)"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement a “smart error experience” in the frontend: parse compilation/runtime error text into structured diagnostics (at minimum: message, severity, and best-effort line/column when present), render an error list, and show an inline code-frame preview for a selected error with the referenced line highlighted.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "smart error experience"
+        ]
+      },
+      "acceptanceCriteria": [
+        "When stderr contains line/column patterns (e.g., “line 12”, “12:5”, “(12,5)”), the UI extracts and displays line/column fields when possible",
+        "UI renders a list of errors/warnings (when multiple are present) and allows selecting an item",
+        "Selecting an error shows a code-frame snippet with the relevant line highlighted (best-effort if only line is known)",
+        "If no structure can be extracted, UI still displays raw stderr and indicates it could not locate line/column"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add a backend API (Motoko, single actor) that accepts a compile/run request (language identifier, source code, optional stdin, optional compile/run flags) and returns a normalized result (stdout, stderr, status/exit code, and any structured diagnostic fields available).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "all language code compiler"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend exposes an update method to submit jobs and returns a single normalized result object for the frontend to render",
+        "Backend validates request size limits (rejects overly large source/stdin with a clear error message)",
+        "Backend returns errors in a consistent format that the frontend can display (request error vs compilation/runtime stderr)"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Integrate the backend with an external compilation/execution HTTP API (generic REST) to support multiple languages, with configuration for the provider base URL and any required keys/tokens stored server-side (not shipped to the browser).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "compile via external APIs"
+        ]
+      },
+      "acceptanceCriteria": [
+        "There is a single place to configure the external provider connection (base URL + credentials) in the backend configuration approach used by the template",
+        "The frontend never requires an API key to compile/run code",
+        "At least one language can be compiled/run end-to-end through the external provider, and the system is structured so additional languages can be added via a mapping table/config"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Use React Query on the frontend to call the backend compile/run method, including request cancellation/disable while a request is in flight, and user-visible error handling for network/provider failures.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "submit code, compile via external APIs, show clear helpful errors"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Compile/run action is disabled (or shows loading state) while a request is in flight",
+        "Network/provider failures show a readable error state with retry",
+        "Successful results are rendered without requiring a page refresh"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Add a coherent visual theme for the app (colors, typography, spacing, and component styling) and apply it consistently across the editor, controls, and results panels (do not use blue/purple as the primary palette).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "App has a consistent, deliberate theme across all screens/components",
+        "Primary/secondary actions are visually distinct and accessible",
+        "Theme avoids blue/purple as the primary palette"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Add generated static images to support the UI branding and render them in the frontend from frontend/public/assets/generated.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Generated images exist under frontend/public/assets/generated and are referenced directly by the frontend",
+        "At least one generated image is visible in the UI (e.g., header/landing area)"
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor (all logic in backend/main.mo).",
+    "Do not edit files under frontend/src/components/ui or any other frontend immutablePaths; compose them from outside.",
+    "Use English for all user-facing UI text.",
+    "Do not expose external compilation provider credentials in the frontend bundle."
+  ],
+  "nonGoals": [
+    "Implementing an AI/LLM-based error explainer (heuristics/parsing only).",
+    "Real-time collaboration, chat, or WebSocket streaming logs.",
+    "Third-party authentication providers other than Internet Identity.",
+    "Supporting every language out of the box; the app should be designed to be extensible, but only needs to prove end-to-end flow for at least one language initially."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Minimal compiler app logo mark, flat vector style, warm neutral palette (compiler-logo.dim_512x512.png)",
+      "Abstract code-themed header illustration with warm neutrals and subtle geometric shapes (compiler-hero.dim_1600x900.png)"
+    ],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

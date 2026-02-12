@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Build a web app that compiles/runs code in many languages and provides a smart, user-friendly error explanation experience using external compilation/execution APIs.",
+  "architectural_notes": [
+    "Use external compilation/execution APIs to support multiple languages.",
+    "Provide a smart error experience: parse compiler/runtime errors and present clear, helpful explanations."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Minimal compiler app logo mark, flat vector style, warm neutral palette (compiler-logo.dim_512x512.png)\n- Abstract code-themed header illustration with warm neutrals and subtle geometric shapes (compiler-hero.dim_1600x900.png)",
+  "existing_features": [
+    {
+      "id": "feature-create-a-frontend-page-that-lets-a-user-write-code-choose-a-programming-language-and-submit-a-compile-run-request-then-displays-stdout-stderr-exit-status-and-timing-information-in-a-clear-results-layout",
+      "title": "Create a frontend page that lets a user write code, choose a programming language, and submit a compile/run request, then displays stdout, stderr, exit status, and timing information in a clear results layout.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-smart-error-experience-in-the-frontend-parse-compilation-runtime-error-text-into-structured-diagnostics-at-minimum-message-severity-and-best-effort-line-column-when-present-render-an-error-list-and-show-an-inline-code-frame-preview-for-a-selected-error-with-the-referenced-line-highlighted",
+      "title": "Implement a “smart error experience” in the frontend: parse compilation/runtime error text into structured diagnostics (at minimum: message, severity, and best-effort line/column when present), render an error list, and show an inline code-frame preview for a selected error with the referenced line highlighted.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-use-react-query-on-the-frontend-to-call-the-backend-compile-run-method-including-request-cancellation-disable-while-a-request-is-in-flight-and-user-visible-error-handling-for-network-provider-failures",
+      "title": "Use React Query on the frontend to call the backend compile/run method, including request cancellation/disable while a request is in flight, and user-visible error handling for network/provider failures.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-coherent-visual-theme-for-the-app-colors-typography-spacing-and-component-styling-and-apply-it-consistently-across-the-editor-controls-and-results-panels-do-not-use-blue-purple-as-the-primary-palette",
+      "title": "Add a coherent visual theme for the app (colors, typography, spacing, and component styling) and apply it consistently across the editor, controls, and results panels (do not use blue/purple as the primary palette).",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-generated-static-images-to-support-the-ui-branding-and-render-them-in-the-frontend-from-frontend-public-assets-generated",
+      "title": "Add generated static images to support the UI branding and render them in the frontend from frontend/public/assets/generated.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "All-language code compiler web app with smart error explanations (submit code, compile via external APIs, show clear helpful errors)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Add a backend API (Motoko, single actor) that accepts a compile/run request (language identifier, source code, optional stdin, optional compile/run flags) and returns a normalized result (stdout, stderr, status/exit code, and any structured diagnostic fields available).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Integrate the backend with an external compilation/execution HTTP API (generic REST) to support multiple languages, with configuration for the provider base URL and any required keys/tokens stored server-side (not shipped to the browser).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "All-language code compiler web app with smart error experience",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

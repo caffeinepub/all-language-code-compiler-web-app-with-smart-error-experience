@@ -1,0 +1,143 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "All-language code compiler web app (frontend) with smart diagnostics",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Build the main compiler UI to edit code, choose language, submit compile/run, and render normalized results (stdout/stderr/status/timing).",
+      "acceptanceCriteria": [
+        "User can select a language from a dropdown and type/paste code into an editor area",
+        "User can click a primary action (e.g., “Compile & Run”) to submit the code",
+        "UI shows separate sections/tabs for Standard Output and Standard Error",
+        "UI shows a visible status for: idle, submitting, success, failure (request-level)"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the root app shell that renders a single compiler page view (no extra routes unless needed), including a header area and the main editor/results layout. Use shadcn-ui components (e.g., Card, Button, Tabs) to compose the layout. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/CompilerPage.tsx",
+          "operation": "create",
+          "description": "Implement the compiler page with: language selector, code editor area, optional stdin area, primary 'Compile & Run' action, and a results panel that shows stdout, stderr, exit status, and timing in a clear layout (e.g., cards + tabs). Use shadcn-ui components (e.g., Select, Textarea, Tabs, Badge, ScrollArea) for accessible UI composition. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/types/compiler.ts",
+          "operation": "create",
+          "description": "Define frontend types for compile/run requests and normalized results (stdout, stderr, exit status, timing fields) to keep UI rendering consistent and strongly typed."
+        },
+        {
+          "path": "frontend/src/components/compiler/ResultsPanel.tsx",
+          "operation": "create",
+          "description": "Create a dedicated results panel component that renders request-level status (idle/submitting/success/failure), timing, and separate stdout/stderr sections (tabs or split panel). Use shadcn-ui components for tabs, badges, and containers. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/main.tsx",
+          "operation": "modify",
+          "description": "Ensure the app renders the new App component and keep React Query provider wiring intact so the compiler page can use React Query for submit actions."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Implement smart error parsing, diagnostics list rendering, and code-frame preview with highlighted lines for selected diagnostics.",
+      "acceptanceCriteria": [
+        "When stderr contains line/column patterns (e.g., “line 12”, “12:5”, “(12,5)”), the UI extracts and displays line/column fields when possible",
+        "UI renders a list of errors/warnings (when multiple are present) and allows selecting an item",
+        "Selecting an error shows a code-frame snippet with the relevant line highlighted (best-effort if only line is known)",
+        "If no structure can be extracted, UI still displays raw stderr and indicates it could not locate line/column"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/lib/diagnostics/parseDiagnostics.ts",
+          "operation": "create",
+          "description": "Add heuristics-based stderr parsing that extracts structured diagnostics with at minimum: message, severity, and best-effort line/column when patterns are present; fall back to a single 'unlocated' diagnostic when parsing fails."
+        },
+        {
+          "path": "frontend/src/components/compiler/DiagnosticsPanel.tsx",
+          "operation": "create",
+          "description": "Render a diagnostics list (errors/warnings) derived from stderr, allow selecting an item, and show an explanation when no line/column could be extracted. Use shadcn-ui components (e.g., Card, Button, ScrollArea, Badge) for list and selection UI. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/compiler/CodeFrame.tsx",
+          "operation": "create",
+          "description": "Implement a code-frame preview that shows a snippet around the selected diagnostic’s line (best-effort) and highlights the referenced line (and column marker when available)."
+        },
+        {
+          "path": "frontend/src/pages/CompilerPage.tsx",
+          "operation": "modify",
+          "description": "Wire stderr parsing into the results flow: build structured diagnostics from stderr, render the diagnostics panel, and keep raw stderr available even when parsing fails."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Use React Query to submit compile/run requests to the backend, with in-flight disabling/cancellation behavior and user-visible network/provider failure handling.",
+      "acceptanceCriteria": [
+        "Compile/run action is disabled (or shows loading state) while a request is in flight",
+        "Network/provider failures show a readable error state with retry",
+        "Successful results are rendered without requiring a page refresh"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useCompileRunMutation.ts",
+          "operation": "create",
+          "description": "Create a React Query mutation hook that submits compile/run requests to the backend compile/run capability and returns normalized results to the UI; include best-effort cancellation handling (e.g., cancel button disables UI and ignores stale resolution) and expose retry via mutation reset/retry. Use @tanstack/react-query patterns consistent with the existing QueryClientProvider."
+        },
+        {
+          "path": "frontend/src/lib/backend/compileClient.ts",
+          "operation": "create",
+          "description": "Implement a small client wrapper that calls the backend compile/run capability (no credentials on the frontend), maps responses into the normalized frontend result type, and standardizes request-level errors for display."
+        },
+        {
+          "path": "frontend/src/pages/CompilerPage.tsx",
+          "operation": "modify",
+          "description": "Integrate the React Query mutation: disable or show loading state for the primary action while submitting, show a readable error panel for network/provider failures with a retry action, and render successful results immediately without refresh. Use shadcn-ui components (e.g., Button, Alert, Card) for consistent UX. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Apply a cohesive warm-neutral visual theme (no blue/purple primary) across editor, controls, and results panels.",
+      "acceptanceCriteria": [
+        "App has a consistent, deliberate theme across all screens/components",
+        "Primary/secondary actions are visually distinct and accessible",
+        "Theme avoids blue/purple as the primary palette"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/index.css",
+          "operation": "modify",
+          "description": "Adjust global CSS variables (primary/secondary/accent/ring/chart colors, background/foreground) to a warm-neutral palette (e.g., sand/charcoal with warm accent) and ensure consistent typography/spacing defaults across the app; keep styling compatible with Tailwind + shadcn-ui token usage."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Refine theme tokens if needed (e.g., container sizing, typography plugin usage) to support the warm-neutral look without introducing blue/purple as primary, while preserving existing shadcn-ui token-based color mapping."
+        },
+        {
+          "path": "frontend/src/pages/CompilerPage.tsx",
+          "operation": "modify",
+          "description": "Ensure all page sections (editor, controls, results, diagnostics) use consistent spacing and shadcn-ui variants for primary/secondary actions and accessible contrast. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Render generated static branding images from frontend/public/assets/generated in the UI.",
+      "acceptanceCriteria": [
+        "Generated images exist under frontend/public/assets/generated and are referenced directly by the frontend",
+        "At least one generated image is visible in the UI (e.g., header/landing area)"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire branding images into the header area: display the logo at frontend/public/assets/generated/compiler-logo.dim_512x512.png and show the hero illustration frontend/public/assets/generated/compiler-hero.dim_1600x900.png in a responsive header section."
+        }
+      ]
+    }
+  ]
+}

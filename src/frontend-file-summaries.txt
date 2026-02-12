@@ -1,0 +1,15 @@
+{
+  "frontend/src/App.tsx": "Root application component that renders the CompilerPage and Toaster for notifications.",
+  "frontend/src/pages/CompilerPage.tsx": "Main compiler page with language selector, code editor, stdin input, compile/run button, and results display with hero section and branding.",
+  "frontend/src/components/compiler/ResultsPanel.tsx": "Displays compilation results with tabs for stdout, diagnostics, and raw stderr, including status badges and timing information.",
+  "frontend/src/components/compiler/DiagnosticsPanel.tsx": "Renders a list of parsed diagnostics (errors/warnings) with severity badges and allows selecting items to view code context.",
+  "frontend/src/components/compiler/CodeFrame.tsx": "Shows a code snippet with context lines around a diagnostic's location, highlighting the error line and column position.",
+  "frontend/src/types/compiler.ts": "TypeScript interfaces for compile requests, results, and diagnostic structures used throughout the compiler UI.",
+  "frontend/src/lib/diagnostics/parseDiagnostics.ts": "Heuristics-based parser that extracts structured diagnostics with line/column information from compiler stderr output.",
+  "frontend/src/hooks/useCompileRunMutation.ts": "React Query mutation hook for submitting compile/run requests with loading states and error handling.",
+  "frontend/src/lib/backend/compileClient.ts": "Mock client for compile/run operations that simulates backend responses; will be replaced with actual backend integration.",
+  "frontend/index.css": "Global styles with warm-neutral OKLCH color system for both light and dark modes, avoiding blue/purple primary colors.",
+  "frontend/tailwind.config.js": "Tailwind configuration with custom fonts (Inter, JetBrains Mono) and extended theme tokens for the warm-neutral design system.",
+  "frontend/src/main.tsx": "Application entry point that sets up React Query and Internet Identity providers with correct CSS import path.",
+  "frontend/src/index.css": "Global styles with warm-neutral OKLCH color system for both light and dark modes, avoiding blue/purple primary colors."
+}

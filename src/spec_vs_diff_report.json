@@ -1,0 +1,89 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-12T12:36:14.641Z",
+  "summary": "Frontend UI for code editing, language selection, results tabs, and heuristic diagnostics parsing appears implemented, along with a warm-neutral theme. However, the core backend compile/run API and real backend↔external provider integration are not implemented, and the frontend still uses a mock compile client rather than calling the Motoko actor. Generated image assets are referenced but not present in the diff summary.",
+  "missing_requirements": [
+    {
+      "id": "REQ-3",
+      "requirement": "Backend exposes an update method to accept compile/run requests (language, code, optional stdin/flags) and returns a normalized result (stdout, stderr, status/exit code, timing/diagnostics as applicable), including request size validation and consistent error formatting.",
+      "reason": "The added Motoko actor does not define any compile/run update method or request/response types matching the required API. It also does not show request size limit validation or normalized error handling for request-level vs compiler/runtime stderr.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Integrate backend with an external compilation/execution HTTP API (REST) with provider base URL + credentials stored server-side, supporting at least one language end-to-end and structured for adding more languages via mapping/config.",
+      "reason": "Backend only contains a hardcoded test GET to \"http://fastapi:8000/echo\" via codeToServe(), and no compile/run job submission to an external compiler/executor API. No language mapping to provider API requests/responses is shown.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Use React Query to call the backend compile/run method (not a mock), with request disable/cancellation while in flight, and user-visible error handling with retry for network/provider failures.",
+      "reason": "The React Query mutation calls a mocked client that simulates responses and explicitly states it will be replaced when the backend implements the method; no actor call is shown. Cancellation support is not evidenced in the provided code (only retry: 1).",
+      "evidence": [
+        "frontend/src/hooks/useCompileRunMutation.ts",
+        "frontend/src/lib/backend/compileClient.ts"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "requirement": "Add generated static images under frontend/public/assets/generated and reference them from the frontend; at least one is visible in the UI.",
+      "reason": "The UI references generated image paths, but the diff summary does not include any added files under frontend/public/assets/generated (no actual image files shown).",
+      "evidence": [
+        "frontend/src/pages/CompilerPage.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Internet Identity authentication provider setup and related actor identity handling (useInternetIdentity, InternetIdentityProvider, authenticated vs anonymous actor creation).",
+      "reason": "The BuildRequest does not ask to add authentication UX or require Internet Identity integration for the compiler flow; it is extra functionality beyond the stated requirements.",
+      "evidence": [
+        "frontend/src/hooks/useInternetIdentity.ts",
+        "frontend/src/hooks/useActor.ts",
+        "frontend/src/main.tsx"
+      ]
+    },
+    {
+      "description": "Backend admin-guarded configuration methods (onlyBruce principal gate, setupApiKey, setApiUrl, getApiUrl) and a test HTTP echo method (codeToServe).",
+      "reason": "While REQ-4 requires server-side storage of provider config, the specific admin-guard mechanism and the unrelated echo endpoint are not requested; moreover, these do not implement the required compile/run API.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Mock compile/run implementation that fabricates results for multiple languages on the frontend.",
+      "reason": "The requested flow is frontend → backend → external provider; implementing a mock compiler client is not requested as a feature and does not satisfy REQ-3/REQ-4/REQ-5.",
+      "evidence": [
+        "frontend/src/lib/backend/compileClient.ts"
+      ]
+    }
+  ],
+  "confidence": 0.74,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/compiler/CodeFrame.tsx",
+    "frontend/src/components/compiler/DiagnosticsPanel.tsx",
+    "frontend/src/components/compiler/ResultsPanel.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useCompileRunMutation.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/index.css",
+    "frontend/src/lib/backend/compileClient.ts",
+    "frontend/src/lib/diagnostics/parseDiagnostics.ts",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/CompilerPage.tsx",
+    "frontend/src/types/compiler.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}
